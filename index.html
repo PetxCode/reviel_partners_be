@@ -1,0 +1,1223 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reviel · Outreach Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap"
+  rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+  :root {
+    --ink: #15332E;
+    --ink-2: #22453F;
+    --body: #54655F;
+    --body-soft: #6B7A74;
+    --teal: #2E7C72;
+    --teal-deep: #1F5E56;
+    --sand: #EDE3D0;
+    --glass: rgba(255, 255, 255, .58);
+    --glass-strong: rgba(255, 255, 255, .80);
+    --glass-quiet: rgba(255, 255, 255, .42);
+    --glass-border: rgba(255, 255, 255, .72);
+    --hair: rgba(21, 51, 46, .10);
+    --hair-soft: rgba(21, 51, 46, .07);
+    --amber: #8C5E1E;
+    --amber-tint: rgba(214, 168, 96, .20);
+    --amber-line: rgba(180, 140, 70, .45);
+    --shadow: 0 24px 70px rgba(18, 48, 42, .16);
+    --shadow-sm: 0 6px 22px rgba(18, 48, 42, .10);
+    --sans: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", sans-serif;
+    --serif: "Fraunces", Georgia, "Times New Roman", serif;
+    /* To use a real photo instead of the CSS coastline, uncomment the next line
+       and point it at your image. It layers over the gradient and covers it. */
+    /* --hero-photo:url("https://www.reviel.app/your-hero.jpg"); */
+    --hero-photo: none;
+  }
+
+  * {
+    box-sizing: border-box
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%
+  }
+
+  body {
+    margin: 0;
+    color: var(--ink);
+    font-family: var(--sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    min-height: 100vh
+  }
+
+  .scene {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    background-size: cover;
+    background-position: center;
+    background:
+      var(--hero-photo),
+      radial-gradient(680px 420px at 62% 20%, rgba(255, 244, 224, .85), rgba(255, 244, 224, 0) 60%),
+      linear-gradient(180deg, #FCF2E2 0%, #F7E4CC 16%, #F1DAC5 30%, #DFE7D8 43%, #AEDDD3 52%, #7FCFC3 60%, #55B7AC 69%, #4CB0A6 77%, #CFE6DA 86%, #ECE2CF 100%);
+  }
+
+  .scene::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 58%;
+    height: 2px;
+    background: rgba(255, 255, 255, .55);
+    filter: blur(1px)
+  }
+
+  .grain {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: .05;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")
+  }
+
+  .frame {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 26px
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 26px 0 0
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 11px
+  }
+
+  .mark {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--teal);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: 18px;
+    box-shadow: 0 2px 8px rgba(31, 94, 86, .35)
+  }
+
+  .wordmark {
+    font-family: var(--serif);
+    font-size: 21px;
+    color: var(--ink);
+    letter-spacing: .005em
+  }
+
+  .navstatus {
+    margin-left: auto;
+    font-size: 13px;
+    color: var(--teal-deep);
+    letter-spacing: .02em;
+    max-width: 44ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap
+  }
+
+  .prog {
+    margin: 22px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 9px
+  }
+
+  .prog-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--teal-deep)
+  }
+
+  .prog-track {
+    height: 2px;
+    background: rgba(21, 51, 46, .14);
+    border-radius: 2px;
+    overflow: hidden
+  }
+
+  .prog-fill {
+    height: 100%;
+    width: 0;
+    background: var(--teal);
+    transition: width .5s cubic-bezier(.2, .7, .2, 1)
+  }
+
+  .glass {
+    background: var(--glass);
+    backdrop-filter: blur(20px) saturate(1.25);
+    -webkit-backdrop-filter: blur(20px) saturate(1.25);
+    border: 1px solid var(--glass-border);
+    border-radius: 22px;
+    box-shadow: var(--shadow)
+  }
+
+  @supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))) {
+    .glass {
+      background: rgba(255, 255, 255, .9)
+    }
+  }
+
+  .hero {
+    margin: 34px 0 0;
+    padding: 44px 48px 40px
+  }
+
+  @media(max-width:640px) {
+    .hero {
+      padding: 32px 24px
+    }
+  }
+
+  .eyebrow {
+    font-size: 12.5px;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--teal);
+    font-weight: 600
+  }
+
+  .hero h1 {
+    font-family: var(--serif);
+    font-weight: 600;
+    color: var(--ink);
+    font-size: clamp(38px, 6.2vw, 62px);
+    line-height: 1.02;
+    letter-spacing: -.015em;
+    margin: 16px 0 0
+  }
+
+  .hero .lede {
+    color: var(--body);
+    font-size: 17px;
+    max-width: 60ch;
+    margin: 18px 0 0
+  }
+
+  .innernote {
+    margin: 26px 0 0;
+    padding: 18px 22px;
+    background: var(--glass-quiet);
+    border: 1px solid var(--glass-border);
+    border-radius: 14px;
+    font-size: 14px;
+    color: var(--ink-2);
+    line-height: 1.6
+  }
+
+  .innernote strong {
+    color: var(--ink)
+  }
+
+  .card {
+    margin: 22px 0 0;
+    padding: 0;
+    overflow: hidden
+  }
+
+  .card-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 26px 30px 20px
+  }
+
+  .card-num {
+    font-family: var(--serif);
+    font-size: 19px;
+    color: var(--teal);
+    flex: 0 0 auto;
+    line-height: 1.4;
+    min-width: 16px
+  }
+
+  .card-title {
+    font-family: var(--serif);
+    font-size: 23px;
+    color: var(--ink);
+    font-weight: 600;
+    letter-spacing: -.01em;
+    line-height: 1.15
+  }
+
+  .card-desc {
+    color: var(--body);
+    font-size: 14px;
+    margin-top: 3px
+  }
+
+  .card-meta {
+    margin-left: auto;
+    font-size: 12.5px;
+    color: var(--teal-deep);
+    padding-top: 6px;
+    white-space: nowrap
+  }
+
+  .card-body {
+    padding: 4px 30px 30px
+  }
+
+  @media(max-width:640px) {
+
+    .card-head,
+    .card-body {
+      padding-left: 22px;
+      padding-right: 22px
+    }
+  }
+
+  label {
+    display: block;
+    font-size: 11.5px;
+    color: var(--teal-deep);
+    margin: 0 0 7px;
+    font-weight: 700;
+    letter-spacing: .09em;
+    text-transform: uppercase
+  }
+
+  input[type=email],
+  input[type=text],
+  input[type=url],
+  textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--hair);
+    border-radius: 11px;
+    background: rgba(255, 255, 255, .72);
+    color: var(--ink);
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 13.5px;
+    transition: border-color .15s, box-shadow .15s, background .15s
+  }
+
+  textarea {
+    font-family: var(--sans);
+    font-size: 14px;
+    min-height: 86px;
+    resize: vertical
+  }
+
+  input:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--teal);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(46, 124, 114, .14)
+  }
+
+  .hint {
+    font-size: 12.5px;
+    color: var(--body-soft);
+    margin: 8px 0 0;
+    line-height: 1.5
+  }
+
+  .hint a {
+    color: var(--teal-deep)
+  }
+
+  .grid2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px
+  }
+
+  @media(max-width:720px) {
+    .grid2 {
+      grid-template-columns: 1fr
+    }
+  }
+
+  .field+.field {
+    margin-top: 20px
+  }
+
+  .drop {
+    position: relative;
+    border: 1.5px dashed rgba(46, 124, 114, .5);
+    border-radius: 16px;
+    background: rgba(255, 255, 255, .4);
+    padding: 30px 22px;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color .15s, background .15s
+  }
+
+  .drop:hover,
+  .drop:focus-within {
+    border-color: var(--teal);
+    background: rgba(255, 255, 255, .6)
+  }
+
+  .drop input {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer
+  }
+
+  .drop .k {
+    font-family: var(--serif);
+    font-size: 19px;
+    color: var(--ink)
+  }
+
+  .drop .d {
+    font-size: 13px;
+    color: var(--body);
+    margin-top: 5px
+  }
+
+  .fname {
+    display: inline-block;
+    margin-top: 13px;
+    font-family: ui-monospace, monospace;
+    font-size: 12.5px;
+    color: var(--teal-deep)
+  }
+
+  .parseErr {
+    color: var(--amber);
+    font-size: 13.5px;
+    margin: 13px 0 0;
+    line-height: 1.5
+  }
+
+  .stages {
+    display: flex;
+    gap: 12px
+  }
+
+  @media(max-width:560px) {
+    .stages {
+      flex-direction: column
+    }
+  }
+
+  .stage {
+    flex: 1;
+    border: 1px solid var(--hair);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .5);
+    padding: 15px 15px;
+    cursor: pointer;
+    display: flex;
+    gap: 13px;
+    align-items: center;
+    text-align: left;
+    transition: border-color .15s, background .15s, box-shadow .15s
+  }
+
+  .stage:hover {
+    border-color: rgba(46, 124, 114, .45)
+  }
+
+  .stage[aria-pressed=true] {
+    border-color: var(--teal);
+    background: rgba(255, 255, 255, .82);
+    box-shadow: 0 0 0 1px var(--teal) inset
+  }
+
+  .stage .num {
+    flex: 0 0 auto;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(46, 124, 114, .5);
+    color: var(--teal);
+    font-family: var(--serif);
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, .7)
+  }
+
+  .stage[aria-pressed=true] .num {
+    background: var(--teal);
+    border-color: var(--teal);
+    color: #fff
+  }
+
+  .stage .k {
+    font-family: var(--serif);
+    font-size: 17px;
+    color: var(--ink);
+    line-height: 1.05
+  }
+
+  .stage .c {
+    font-size: 11.5px;
+    color: var(--body);
+    margin-top: 3px;
+    letter-spacing: .02em
+  }
+
+  details.optional {
+    margin-top: 22px;
+    border: 1px solid var(--hair);
+    border-radius: 14px;
+    background: rgba(255, 255, 255, .4);
+    overflow: hidden
+  }
+
+  details.optional summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    font-family: var(--serif);
+    font-size: 16px;
+    color: var(--ink)
+  }
+
+  details.optional summary::-webkit-details-marker {
+    display: none
+  }
+
+  .tag-opt {
+    font-size: 10.5px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--teal-deep);
+    border: 1px solid rgba(46, 124, 114, .4);
+    border-radius: 999px;
+    padding: 3px 10px;
+    font-weight: 700
+  }
+
+  .chev {
+    margin-left: auto;
+    color: var(--body-soft);
+    transition: transform .2s
+  }
+
+  details.optional[open] .chev {
+    transform: rotate(90deg)
+  }
+
+  .opt-inner {
+    padding: 6px 20px 22px;
+    border-top: 1px solid var(--hair-soft)
+  }
+
+  .counts {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid var(--hair);
+    border-radius: 14px;
+    overflow: hidden;
+    background: rgba(255, 255, 255, .5)
+  }
+
+  .counts .c {
+    padding: 15px 20px;
+    border-right: 1px solid var(--hair-soft);
+    flex: 1;
+    min-width: 120px
+  }
+
+  .counts .c:last-child {
+    border-right: none
+  }
+
+  .counts .n {
+    font-family: var(--serif);
+    font-size: 26px;
+    color: var(--ink);
+    line-height: 1
+  }
+
+  .counts .n .amberN {
+    color: var(--amber)
+  }
+
+  .counts .l {
+    font-size: 11px;
+    color: var(--teal-deep);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-top: 6px
+  }
+
+  .selrow {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 16px 0 0
+  }
+
+  .ledger {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 13px
+  }
+
+  .slip {
+    display: grid;
+    grid-template-columns: 52px 1fr 168px;
+    background: rgba(255, 255, 255, .6);
+    border: 1px solid var(--glass-border);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: box-shadow .15s, opacity .15s, border-color .15s;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px)
+  }
+
+  .slip:hover {
+    box-shadow: var(--shadow-sm)
+  }
+
+  .slip.flagged {
+    background: var(--amber-tint);
+    border-color: var(--amber-line)
+  }
+
+  .slip.unsel {
+    opacity: .5
+  }
+
+  .slip.done {
+    opacity: .55
+  }
+
+  .slip.done .org-name {
+    text-decoration: line-through
+  }
+
+  .slip.failed {
+    border-color: #c0553f
+  }
+
+  .slip .check {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 22px;
+    background: rgba(255, 255, 255, .3);
+    border-right: 1px solid var(--hair-soft)
+  }
+
+  .slip.flagged .check {
+    background: rgba(214, 168, 96, .16)
+  }
+
+  .check input {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 19px;
+    height: 19px;
+    border: 1.5px solid var(--teal);
+    border-radius: 6px;
+    background: rgba(255, 255, 255, .8);
+    cursor: pointer;
+    position: relative;
+    transition: background .12s
+  }
+
+  .check input:checked {
+    background: var(--teal)
+  }
+
+  .check input:checked::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    width: 5px;
+    height: 11px;
+    border: solid #fff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg)
+  }
+
+  .check input:focus-visible {
+    outline: 2px solid var(--teal-deep);
+    outline-offset: 2px
+  }
+
+  .slip .content {
+    padding: 19px 22px
+  }
+
+  .head-line {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    flex-wrap: wrap
+  }
+
+  .seal-num {
+    flex: 0 0 auto;
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    border: 1px solid rgba(46, 124, 114, .5);
+    color: var(--teal);
+    font-family: var(--serif);
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, .6)
+  }
+
+  .org-name {
+    font-family: var(--serif);
+    font-size: 19px;
+    color: var(--ink);
+    letter-spacing: -.01em
+  }
+
+  .place {
+    font-size: 11px;
+    color: var(--body-soft);
+    letter-spacing: .1em;
+    text-transform: uppercase
+  }
+
+  .flag-badge {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    background: var(--amber);
+    color: #fff;
+    border-radius: 999px;
+    padding: 3px 10px
+  }
+
+  .to {
+    font-family: ui-monospace, monospace;
+    font-size: 12.5px;
+    color: var(--teal-deep);
+    margin-top: 8px;
+    word-break: break-all
+  }
+
+  .subj {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-2);
+    margin-top: 13px
+  }
+
+  .bodyq {
+    font-size: 13px;
+    color: #455049;
+    white-space: pre-wrap;
+    margin-top: 9px;
+    max-height: 108px;
+    overflow: auto;
+    padding: 11px 15px;
+    background: rgba(255, 255, 255, .66);
+    border-radius: 11px;
+    border: 1px solid var(--hair-soft)
+  }
+
+  .flagnote {
+    font-size: 12px;
+    color: var(--amber);
+    margin-top: 11px;
+    line-height: 1.5;
+    display: flex;
+    gap: 8px
+  }
+
+  .flagnote::before {
+    content: "⚑";
+    flex: 0 0 auto
+  }
+
+  .slip .acts {
+    border-left: 1px solid var(--hair-soft);
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    padding: 19px 17px;
+    justify-content: flex-start
+  }
+
+  @media(max-width:720px) {
+    .slip {
+      grid-template-columns: 52px 1fr
+    }
+
+    .slip .acts {
+      grid-column: 1 / -1;
+      border-left: none;
+      border-top: 1px dashed var(--hair);
+      flex-direction: row
+    }
+  }
+
+  button {
+    font-family: var(--sans);
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 11px;
+    border: 1px solid var(--teal);
+    background: rgba(255, 255, 255, .6);
+    color: var(--teal-deep);
+    padding: 10px 15px;
+    font-weight: 600;
+    letter-spacing: .01em;
+    transition: background .15s, color .15s, transform .05s
+  }
+
+  button:hover {
+    background: rgba(255, 255, 255, .9)
+  }
+
+  button:active {
+    transform: translateY(1px)
+  }
+
+  button:focus-visible {
+    outline: 2px solid var(--teal-deep);
+    outline-offset: 2px
+  }
+
+  button.solid {
+    background: var(--teal);
+    color: #fff;
+    border-color: var(--teal)
+  }
+
+  button.solid:hover {
+    background: var(--teal-deep)
+  }
+
+  button.solid:disabled {
+    opacity: .55;
+    cursor: default
+  }
+
+  button.ghost {
+    border-color: var(--hair);
+    color: var(--body)
+  }
+
+  button.ghost:hover {
+    background: rgba(255, 255, 255, .7)
+  }
+
+  button.wide {
+    width: 100%
+  }
+
+  a.link {
+    text-decoration: none;
+    display: block
+  }
+
+  .bar {
+    position: sticky;
+    bottom: 18px;
+    margin: 26px 0 0;
+    padding: 16px 22px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    background: var(--glass-strong);
+    backdrop-filter: blur(20px) saturate(1.3);
+    -webkit-backdrop-filter: blur(20px) saturate(1.3);
+    border: 1px solid var(--glass-border);
+    border-radius: 18px;
+    box-shadow: var(--shadow)
+  }
+
+  .bar .spacer {
+    flex: 1
+  }
+
+  .bar .status {
+    font-size: 12.5px;
+    color: var(--body);
+    max-width: 44ch
+  }
+
+  .hidden {
+    display: none
+  }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    bottom: 26px;
+    background: var(--ink);
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 999px;
+    font-size: 13px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s, transform .2s;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .22);
+    z-index: 50
+  }
+
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0)
+  }
+
+  .foot {
+    text-align: center;
+    color: var(--teal-deep);
+    font-size: 13px;
+    margin: 40px 0 12px;
+    font-family: var(--serif);
+    font-style: italic
+  }
+
+  @media(prefers-reduced-motion:reduce) {
+    * {
+      transition: none !important
+    }
+  }
+</style>
+
+<div class="scene"></div>
+<div class="grain"></div>
+
+<div class="frame">
+  <div class="topbar">
+    <div class="logo"><span class="mark">R</span><span class="wordmark">Reviel</span></div>
+    <div class="navstatus" id="navStatus">Partnership outreach</div>
+  </div>
+
+  <div class="prog">
+    <div class="prog-labels"><span>Outreach Desk</span><span id="progPct">0%</span></div>
+    <div class="prog-track">
+      <div class="prog-fill" id="progFill"></div>
+    </div>
+  </div>
+
+  <header class="glass hero">
+    <div class="eyebrow">Reviel · Partnership Outreach</div>
+    <h1>The Outreach Desk</h1>
+    <p class="lede">Load a sequence, choose which letter to send, and read every recipient before it goes. Each message
+      stays personal, on brand, and in your hands.</p>
+    <div class="innernote">
+      <strong>Before you send.</strong> Confirm the sending domain has SPF, DKIM, and DMARC in place, and that the inbox
+      has been warmed. Send from a dedicated outreach domain rather than your primary one, and post in small batches
+      rather than all at once. Flagged rows are held back until their address is checked.
+    </div>
+  </header>
+
+  <section class="glass card">
+    <div class="card-head"><span class="card-num">1</span>
+      <div>
+        <div class="card-title">Load the sequence</div>
+        <div class="card-desc">An .xlsx with organisations, contact emails, and drafted letters.</div>
+      </div>
+      <span class="card-meta" id="loadMeta"></span>
+    </div>
+    <div class="card-body">
+      <label class="drop" for="file"><input id="file" type="file" accept=".xlsx,.xls">
+        <div class="k">Choose a sequence workbook</div>
+        <div class="d">Drag a file here, or click to browse</div>
+      </label>
+      <div><span class="fname" id="fname"></span></div>
+      <p id="parseErr" class="parseErr hidden"></p>
+    </div>
+  </section>
+
+  <section class="glass card hidden" id="step2">
+    <div class="card-head"><span class="card-num">2</span>
+      <div>
+        <div class="card-title">Sender and letter</div>
+        <div class="card-desc">Who it comes from, and which letter in the sequence is active.</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="grid2">
+        <div class="field">
+          <label for="sender">Sender address</label>
+          <input id="sender" type="email" value="peter.oti@reviel.app" placeholder="peter.oti@reviel.app"
+            autocomplete="off">
+          <p class="hint">This is the From address on each letter. For direct send it must be an address on a domain you
+            have verified in Resend.</p>
+        </div>
+        <div class="field">
+          <label>Which letter is active</label>
+          <div class="stages" id="stages">
+            <div class="stage" data-stage="1" role="button" tabindex="0" aria-pressed="true"><span
+                class="num">1</span><span><span class="k">Rapport</span><span class="c">Day 0</span></span></div>
+            <div class="stage" data-stage="2" role="button" tabindex="0" aria-pressed="false"><span
+                class="num">2</span><span><span class="k">Offer</span><span class="c">Day 4 to 5</span></span></div>
+            <div class="stage" data-stage="3" role="button" tabindex="0" aria-pressed="false"><span
+                class="num">3</span><span><span class="k">Close</span><span class="c">Day 9 to 10</span></span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:22px">
+        <label for="footer">Compliance footer, appended to letters 1 and 2</label>
+        <textarea id="footer"
+          placeholder="Reviel, 123 Example Ave, Suite 100, City, ST 00000&#10;Not interested in hearing from us? Reply with the word remove and we will not write again."></textarea>
+        <p class="hint">A physical mailing address and an opt-out line are required by law on the first two letters.
+          Leave blank only if your drafts already contain them.</p>
+      </div>
+
+      <details class="optional">
+        <summary><span>Direct send</span><span class="tag-opt">via your endpoint</span><span class="chev">›</span>
+        </summary>
+        <div class="opt-inner">
+          <p class="hint" style="margin-bottom:15px">Direct send posts each letter to your own send endpoint, a small
+            serverless function that holds your Resend key and calls Resend for you. The key never lives in this page.
+            Paste the URL of your deployed function below, for example <span
+              class="mono">https://your-app.vercel.app/api/send</span>, or <span class="mono">/api/send</span> if this
+            page is hosted on the same project. Left blank, the desk opens drafts in your mail client instead.</p>
+          <div class="field"><label for="sendEndpoint">Send endpoint URL</label><input id="sendEndpoint" type="url"
+              placeholder="https://your-app.vercel.app/api/send" autocomplete="off"></div>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <section class="glass card hidden" id="step3">
+    <div class="card-head"><span class="card-num">3</span>
+      <div>
+        <div class="card-title">Review recipients</div>
+        <div class="card-desc">Read each letter, and choose who receives it.</div>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="counts" id="counts"></div>
+      <div class="selrow">
+        <button class="ghost" id="selClean">Select clean only</button>
+        <button class="ghost" id="selAll">Select all</button>
+        <button class="ghost" id="selNone">Clear</button>
+      </div>
+      <div class="ledger" id="ledger"></div>
+    </div>
+  </section>
+
+  <div class="bar hidden" id="bar">
+    <button class="solid" id="sendAllBtn">Send selected letters</button>
+    <button class="ghost" id="openNext">Open next draft</button>
+    <button class="ghost" id="exportCsv">Export CSV</button>
+    <div class="spacer"></div>
+    <p class="status" id="statusHint">Direct send posts to your Resend endpoint when a URL is set. Otherwise, drafts
+      open one at a time in your mail client.</p>
+  </div>
+
+  <p class="foot">Reviel · your body knows before your mind does</p>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  (function () {
+    var COLS = {
+      org: "Organization Name", city: "City", state: "State", email: "Contact Email",
+      s: function (n) { return "Email " + n + " Subject"; }, b: function (n) { return "Email " + n + " Body"; }, flags: "Data Quality Flags"
+    };
+    var state = { rows: [], stage: 1, selected: {}, queue: [], qi: 0, queueKey: "" };
+    var $ = function (id) { return document.getElementById(id); };
+    function esc(s) { return String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;"); }
+    function toast(m) { var t = $("toast"); t.textContent = m; t.classList.add("show"); clearTimeout(t._t); t._t = setTimeout(function () { t.classList.remove("show"); }, 2200); }
+    var store = { get: function (k) { try { return localStorage.getItem(k) || ""; } catch (e) { return ""; } }, set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) { } } };
+
+    function findCol(row, cands) {
+      var keys = Object.keys(row);
+      for (var i = 0; i < cands.length; i++) { var c = cands[i].toLowerCase(); for (var j = 0; j < keys.length; j++) { if (keys[j].toLowerCase().trim() === c) return keys[j]; } }
+      for (var i = 0; i < cands.length; i++) { var c = cands[i].toLowerCase(); for (var j = 0; j < keys.length; j++) { if (keys[j].toLowerCase().trim().indexOf(c) !== -1) return keys[j]; } }
+      return null;
+    }
+    function loaded() { return state.rows.length > 0; }
+    function updateProgress() {
+      var pct = 0;
+      if (loaded()) { var sel = 0; state.rows.forEach(function (r, i) { if (state.selected[i]) sel++; }); pct = Math.round(40 + 60 * (state.rows.length ? sel / state.rows.length : 0)); }
+      $("progFill").style.width = pct + "%"; $("progPct").textContent = pct + "%";
+    }
+
+    $("file").addEventListener("change", function (e) {
+      var f = e.target.files[0]; if (!f) return;
+      $("fname").textContent = f.name; $("navStatus").textContent = f.name;
+      var reader = new FileReader();
+      reader.onload = function (ev) {
+        try {
+          var wb = XLSX.read(new Uint8Array(ev.target.result), { type: "array" });
+          var json = null;
+          if (wb.SheetNames.indexOf("Sequences") >= 0) json = XLSX.utils.sheet_to_json(wb.Sheets["Sequences"], { defval: "" });
+          if (!json || !json.length) { for (var i = 0; i < wb.SheetNames.length; i++) { var j = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[i]], { defval: "" }); if (j && j.length) { json = j; break; } } }
+          if (!json || !json.length) throw new Error("empty");
+          var sample = json[0];
+          var colOrg = findCol(sample, ["Organization Name", "Organization", "Company", "Name", "Business"]) || Object.keys(sample)[0];
+          var colEmail = findCol(sample, ["Contact Email", "Email Address", "Email", "Mail"]) || Object.keys(sample)[1];
+          COLS = {
+            org: colOrg, email: colEmail,
+            city: findCol(sample, ["City", "Town", "Location"]) || "",
+            state: findCol(sample, ["State", "Province", "Region"]) || "",
+            flags: findCol(sample, ["Data Quality Flags", "Flags", "Status"]) || "",
+            s: function (n) { return findCol(sample, ["Email " + n + " Subject", "Subject " + n, "Subject", "Title"]) || colOrg; },
+            b: function (n) { return findCol(sample, ["Email " + n + " Body", "Body " + n, "Body", "Message", "Content"]) || ""; }
+          };
+          state.rows = json.filter(function (r) { return String(r[colOrg] || r[colEmail] || "").trim() !== ""; });
+          state.selected = {};
+          buildRows();
+          $("parseErr").classList.add("hidden");
+          $("loadMeta").textContent = state.rows.length + " organisations";
+          $("step2").classList.remove("hidden"); $("step3").classList.remove("hidden"); $("bar").classList.remove("hidden");
+        } catch (err) {
+          var p = $("parseErr"); p.textContent = "This file could not be read as a sequence. Make sure it has columns for the organisation, a contact email, and the drafted letters."; p.classList.remove("hidden");
+        }
+      };
+      reader.readAsArrayBuffer(f);
+    });
+
+    document.querySelectorAll(".stage").forEach(function (el) {
+      function pick() {
+        state.stage = parseInt(el.getAttribute("data-stage"), 10);
+        document.querySelectorAll(".stage").forEach(function (s) { s.setAttribute("aria-pressed", s === el ? "true" : "false"); }); buildRows();
+      }
+      el.addEventListener("click", pick);
+      el.addEventListener("keydown", function (ev) { if (ev.key === " " || ev.key === "Enter") { ev.preventDefault(); pick(); } });
+    });
+    $("footer").addEventListener("input", buildRows);
+
+    function isFlagged(r) { var f = String(r[COLS.flags] || "").trim(); return f !== "" && f.toLowerCase() !== "none"; }
+    function subjFor(r) { return String(r[COLS.s(state.stage)] || ""); }
+    function bodyFor(r) { var body = String(r[COLS.b(state.stage)] || ""); var foot = $("footer").value.trim(); if (foot && (state.stage === 1 || state.stage === 2)) body = body + "\n\n" + foot; return body; }
+    function mailto(r) { return "mailto:" + encodeURIComponent(String(r[COLS.email] || "").trim()) + "?subject=" + encodeURIComponent(subjFor(r)) + "&body=" + encodeURIComponent(bodyFor(r)); }
+
+    function buildRows() {
+      var led = $("ledger"); led.innerHTML = "";
+      state.rows.forEach(function (r, idx) {
+        var fl = isFlagged(r);
+        if (!(idx in state.selected)) state.selected[idx] = !fl;
+        var sel = state.selected[idx];
+        var place = [r[COLS.city], r[COLS.state]].filter(Boolean).join(", ");
+        var slip = document.createElement("div");
+        slip.className = "slip" + (fl ? " flagged" : "") + (sel ? "" : " unsel");
+        slip.innerHTML =
+          '<div class="check"><input type="checkbox" ' + (sel ? "checked" : "") + ' data-i="' + idx + '" aria-label="Include ' + esc(r[COLS.org]) + '"></div>' +
+          '<div class="content">' +
+          '<div class="head-line"><span class="seal-num">' + state.stage + '</span><span class="org-name">' + esc(r[COLS.org]) + '</span>' +
+          (place ? '<span class="place">' + esc(place) + '</span>' : '') + (fl ? '<span class="flag-badge">verify</span>' : '') + '</div>' +
+          '<div class="to">' + esc(r[COLS.email]) + '</div>' +
+          '<div class="subj">' + esc(subjFor(r)) + '</div>' +
+          '<div class="bodyq">' + esc(bodyFor(r)) + '</div>' +
+          (fl ? '<div class="flagnote">' + esc(String(r[COLS.flags])) + '</div>' : '') +
+          '</div>' +
+          '<div class="acts"><a class="link" href="' + mailto(r) + '"><button class="wide">Open draft</button></a>' +
+          '<button class="ghost wide" data-copy="' + idx + '">Copy letter</button></div>';
+        led.appendChild(slip);
+      });
+      led.querySelectorAll('input[type=checkbox]').forEach(function (cb) {
+        cb.addEventListener("change", function () { var i = parseInt(cb.getAttribute("data-i"), 10); state.selected[i] = cb.checked; cb.closest(".slip").classList.toggle("unsel", !cb.checked); updateCounts(); });
+      });
+      led.querySelectorAll('[data-copy]').forEach(function (btn) {
+        btn.addEventListener("click", function () { var r = state.rows[parseInt(btn.getAttribute("data-copy"), 10)]; if (navigator.clipboard) navigator.clipboard.writeText(subjFor(r) + "\n\n" + bodyFor(r)); toast("Letter copied"); });
+      });
+      updateCounts();
+    }
+
+    function updateCounts() {
+      var sel = 0, flaggedSel = 0; state.rows.forEach(function (r, i) { if (state.selected[i]) { sel++; if (isFlagged(r)) flaggedSel++; } });
+      var total = state.rows.length, ft = state.rows.filter(isFlagged).length;
+      $("counts").innerHTML =
+        '<div class="c"><div class="n">' + total + '</div><div class="l">In sequence</div></div>' +
+        '<div class="c"><div class="n">' + (total - ft) + '</div><div class="l">Clean</div></div>' +
+        '<div class="c"><div class="n"><span class="amberN">' + ft + '</span></div><div class="l">To verify</div></div>' +
+        '<div class="c"><div class="n">' + sel + (flaggedSel ? ' <span class="amberN" style="font-size:15px">(' + flaggedSel + ' flagged)</span>' : '') + '</div><div class="l">Selected · Letter ' + state.stage + '</div></div>';
+      updateProgress();
+    }
+
+    $("selClean").addEventListener("click", function () { state.rows.forEach(function (r, i) { state.selected[i] = !isFlagged(r); }); buildRows(); });
+    $("selAll").addEventListener("click", function () { state.rows.forEach(function (r, i) { state.selected[i] = true; }); buildRows(); });
+    $("selNone").addEventListener("click", function () { state.rows.forEach(function (r, i) { state.selected[i] = false; }); buildRows(); });
+
+    // Endpoint URL is NOT a secret, so it is safe to remember in the browser.
+    var endpointInput = $("sendEndpoint");
+    if (endpointInput) {
+      endpointInput.value = store.get("reviel_send_endpoint");
+      endpointInput.addEventListener("input", function () { store.set("reviel_send_endpoint", endpointInput.value.trim()); });
+    }
+
+    $("sendAllBtn").addEventListener("click", function () {
+      var sel = []; state.rows.forEach(function (r, i) { if (state.selected[i]) sel.push(i); });
+      if (!sel.length) { toast("No recipients selected"); return; }
+      var endpoint = endpointInput ? endpointInput.value.trim() : "";
+      var senderEmail = $("sender").value.trim();
+
+      if (endpoint) {
+        if (!confirm("Send " + sel.length + " letter(s) through your Resend endpoint?")) return;
+        var btn = $("sendAllBtn"); btn.disabled = true; var sent = 0, fail = 0;
+        (function next(k) {
+          if (k >= sel.length) { btn.disabled = false; btn.textContent = "Send selected letters"; toast("Finished. Sent " + sent + ", failed " + fail); return; }
+          var idx = sel[k], r = state.rows[idx]; btn.textContent = "Sending " + (k + 1) + " of " + sel.length;
+          fetch(endpoint, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ from: senderEmail, to: String(r[COLS.email] || "").trim(), subject: subjFor(r), text: bodyFor(r), org: String(r[COLS.org] || "") })
+          }).then(function (res) {
+            var s = $("ledger").children[idx];
+            if (res.ok) { sent++; if (s) { s.classList.remove("failed"); s.classList.add("done"); } setTimeout(function () { next(k + 1); }, 800); }
+            else { return res.json().catch(function () { return {}; }).then(function (d) { fail++; if (s) s.classList.add("failed"); toast("Failed for " + r[COLS.org] + (d && d.message ? ": " + d.message : d && d.error ? ": " + d.error : "")); setTimeout(function () { next(k + 1); }, 800); }); }
+          }).catch(function (err) { fail++; var s = $("ledger").children[idx]; if (s) s.classList.add("failed"); console.error(err); toast("Network error sending to " + r[COLS.org] + ". Check the endpoint URL."); setTimeout(function () { next(k + 1); }, 800); });
+        })(0);
+      } else {
+        if (!confirm("No send endpoint set. Open drafts for all " + sel.length + " recipient(s) in your mail client?")) return;
+        sel.forEach(function (idx, d) { setTimeout(function () { window.open(mailto(state.rows[idx]), "_blank"); var s = $("ledger").children[idx]; if (s) s.classList.add("done"); toast("Opened " + (d + 1) + " of " + sel.length); }, d * 700); });
+      }
+    });
+
+    $("openNext").addEventListener("click", function () {
+      var order = []; state.rows.forEach(function (r, i) { if (state.selected[i]) order.push(i); });
+      if (!order.length) { toast("No recipients selected"); return; }
+      var key = state.stage + ":" + order.join(",");
+      if (state.queueKey !== key) { state.queue = order; state.qi = 0; state.queueKey = key; }
+      if (state.qi >= state.queue.length) { toast("All selected drafts opened"); return; }
+      var idx = state.queue[state.qi], r = state.rows[idx]; var a = document.createElement("a"); a.href = mailto(r); a.click();
+      var s = $("ledger").children[idx]; if (s) s.classList.add("done"); state.qi++; toast("Opened " + state.qi + " of " + state.queue.length + " · " + r[COLS.org]);
+    });
+
+    $("exportCsv").addEventListener("click", function () {
+      var sender = $("sender").value.trim(); var lines = [["from", "to", "organization", "city", "state", "subject", "body", "stage", "flagged"]];
+      state.rows.forEach(function (r, i) { if (!state.selected[i]) return; lines.push([sender, String(r[COLS.email] || "").trim(), r[COLS.org], r[COLS.city] ? r[COLS.city] : "", r[COLS.state] ? r[COLS.state] : "", subjFor(r), bodyFor(r), "Email " + state.stage, isFlagged(r) ? "yes" : "no"]); });
+      if (lines.length === 1) { toast("No recipients selected"); return; }
+      var csv = lines.map(function (row) { return row.map(function (c) { c = String(c == null ? "" : c); return '"' + c.replace(/"/g, '""') + '"'; }).join(","); }).join("\r\n");
+      var blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8;" }); var url = URL.createObjectURL(blob);
+      var a = document.createElement("a"); a.href = url; a.download = "reviel_letter" + state.stage + "_send.csv"; a.click(); URL.revokeObjectURL(url);
+      toast("Exported " + (lines.length - 1) + " recipients");
+    });
+
+    updateProgress();
+  })();
+</script>
